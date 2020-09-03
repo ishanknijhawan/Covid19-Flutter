@@ -115,7 +115,7 @@ class HeaderTotalWorld extends StatelessWidget {
                       buildIcon('CONFIRMED', world.TotalConfirmed,
                           world.NewConfirmed, Colors.red, MyApp.confirmed),
                       buildIcon('RECOVERED', world.TotalRecovered,
-                          world.NewRecovered, Colors.green, MyApp.thermometer),
+                          world.NewRecovered, Colors.green, MyApp.recovered),
                       buildIcon('DEATHS', world.TotalDeaths, world.NewDeaths,
                           Colors.purple, MyApp.death),
                     ],

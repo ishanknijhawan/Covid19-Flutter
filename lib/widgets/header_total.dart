@@ -117,10 +117,10 @@ class HeaderTotal extends StatelessWidget {
                     children: <Widget>[
                       buildIcon('CONFIRMED', india.confirmed,
                           india.deltaconfirmed, Colors.red, MyApp.confirmed),
-                      buildIcon('ACTIVE', india.active, '0',
-                          Colors.orange.withOpacity(1), MyApp.fever),
                       buildIcon('RECOVERED', india.recovered, india.recovered,
                           Colors.green, MyApp.recovered),
+                      buildIcon('DEATHS', india.deaths, india.deltadeaths,
+                          Colors.purple, MyApp.death),
                     ],
                   ),
                 ),
