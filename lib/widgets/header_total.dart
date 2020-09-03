@@ -7,8 +7,8 @@ import '../models/india.dart';
 class HeaderTotal extends StatelessWidget {
   final India india;
   HeaderTotal(this.india);
-  RegExp reg = new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-  Function mathFunc = (Match match) => '${match[1]},';
+  final RegExp reg = new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+  final Function mathFunc = (Match match) => '${match[1]},';
 
   Widget buildIcon(String textStatus, String status, String deltaStatus,
       Color color, String image) {
@@ -42,14 +42,21 @@ class HeaderTotal extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(
-          '↑${deltaStatus.replaceAllMapped(reg, mathFunc)}',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
+        textStatus != 'ACTIVE'
+            ? Text(
+                '↑${deltaStatus.replaceAllMapped(reg, mathFunc)}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.normal,
+                ),
+              )
+            : Text(
+                '',
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              )
       ],
     );
   }

@@ -88,6 +88,11 @@ class _WorldScreenState extends State<WorldScreen>
         }
       }
 
+      var finalList = [];
+      data.sort((b, a) => a.TotalConfirmed.compareTo(b.TotalConfirmed));
+      // for (int i = 0; i < data.length + 1; i++) {
+      //   finalList.add(data[data.length - i]);
+      // }
       return data;
     } else {
       print('error');
