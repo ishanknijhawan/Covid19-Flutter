@@ -26,6 +26,7 @@ dependencies:
   http: ^0.12.2
   flutter_svg: ^0.18.1
   intl: ^0.16.1
+  pull_to_refresh: ^1.6.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -54,6 +55,7 @@ flutter:
     - assets/images/patient.svg
     - assets/images/fever.svg
     - assets/images/thermometer.svg
+    - assets/images/grave.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

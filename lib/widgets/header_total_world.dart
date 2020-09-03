@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import '../main.dart';
-import '../models/india.dart';
+import '../models/world.dart';
 
-class HeaderTotal extends StatelessWidget {
-  final India india;
-  HeaderTotal(this.india);
+class HeaderTotalWorld extends StatelessWidget {
+  final World world;
+  HeaderTotalWorld(this.world);
   RegExp reg = new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
   Function mathFunc = (Match match) => '${match[1]},';
 
-  Widget buildIcon(String textStatus, String status, String deltaStatus,
-      Color color, String image) {
+  Widget buildIcon(String textStatus, int status, int deltaStatus, Color color,
+      String image) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -35,7 +35,7 @@ class HeaderTotal extends StatelessWidget {
           height: 6,
         ),
         Text(
-          status.replaceAllMapped(reg, mathFunc),
+          status.toString().replaceAllMapped(reg, mathFunc),
           style: TextStyle(
             fontSize: 16,
             color: color,
@@ -43,7 +43,7 @@ class HeaderTotal extends StatelessWidget {
           ),
         ),
         Text(
-          '↑${deltaStatus.replaceAllMapped(reg, mathFunc)}',
+          '↑${deltaStatus.toString().replaceAllMapped(reg, mathFunc)}',
           style: TextStyle(
             fontSize: 14,
             color: Colors.grey,
@@ -56,9 +56,13 @@ class HeaderTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime date =
-        new DateFormat("dd/MM/yyyy HH:mm:ss").parse(india.lastupdatedtime);
-    print('coming here with date ${india.lastupdatedtime}');
+    var date1 = world.Date;
+    if (date1.contains("T")) date1 = date1.replaceAll("T", " ");
+    if (date1.contains("Z")) date1 = date1.replaceAll("Z", "");
+    if (date1.contains("-")) date1 = date1.replaceAll("-", "/");
+
+    DateTime date = new DateFormat("yyyy/MM/dd HH:mm:ss").parse(date1);
+    print('coming here with date $date');
 
     return Stack(
       children: [
@@ -73,7 +77,7 @@ class HeaderTotal extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Covid19 Cases Overview',
+                'Covid19 Global Status',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -108,12 +112,12 @@ class HeaderTotal extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      buildIcon('CONFIRMED', india.confirmed,
-                          india.deltaconfirmed, Colors.red, MyApp.confirmed),
-                      buildIcon('ACTIVE', india.active, '0',
-                          Colors.orange.withOpacity(1), MyApp.fever),
-                      buildIcon('RECOVERED', india.recovered, india.recovered,
-                          Colors.green, MyApp.recovered),
+                      buildIcon('CONFIRMED', world.TotalConfirmed,
+                          world.NewConfirmed, Colors.red, MyApp.confirmed),
+                      buildIcon('RECOVERED', world.TotalRecovered,
+                          world.NewRecovered, Colors.green, MyApp.thermometer),
+                      buildIcon('DECEASED', world.TotalDeaths, world.NewDeaths,
+                          Colors.purple, MyApp.death),
                     ],
                   ),
                 ),

@@ -5,42 +5,13 @@ import 'package:http/http.dart' as http;
 import '../widgets/header.dart';
 import '../models/india.dart';
 
-Future<List<India>> fetchData() async {
-  final response = await http.get('https://api.covid19india.org/data.json');
-
-  if (response.statusCode == 200) {
-    List<India> data = [];
-    var finalData = json.decode(response.body);
-    var returnData = finalData['statewise'];
-
-    for (int i = 0; i < returnData.length; i++) {
-      data.add(India(
-        active: returnData[i]['active'],
-        confirmed: returnData[i]['confirmed'],
-        deltaconfirmed: returnData[i]['deltaconfirmed'],
-        deaths: returnData[i]['deaths'],
-        deltadeaths: returnData[i]['deltadeaths'],
-        recovered: returnData[i]['recovered'],
-        deltarecovered: returnData[i]['deltarecovered'],
-        lastupdatedtime: returnData[i]['lastupdatedtime'],
-        migratedother: returnData[i]['migratedother'],
-        state: returnData[i]['state'],
-        statecode: returnData[i]['statecode'],
-        statenotes: returnData[i]['statenotes'],
-      ));
-    }
-
-    return data;
-  } else {
-    print('error');
-    throw Exception('Failed to load album');
-  }
-}
-
 class IndiaScreen extends StatefulWidget {
   @override
   _IndiaScreenState createState() => _IndiaScreenState();
 }
+
+RegExp reg = new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+Function mathFunc = (Match match) => '${match[1]},';
 
 Widget expandRow(String status, String deltaStatus, Color color) {
   return Expanded(
@@ -48,7 +19,7 @@ Widget expandRow(String status, String deltaStatus, Color color) {
     child: Column(
       children: [
         Text(
-          status,
+          status.replaceAllMapped(reg, mathFunc),
           style: TextStyle(
               color: color, fontSize: 15, fontWeight: FontWeight.bold),
         ),
@@ -62,7 +33,40 @@ Widget expandRow(String status, String deltaStatus, Color color) {
   );
 }
 
-class _IndiaScreenState extends State<IndiaScreen> {
+class _IndiaScreenState extends State<IndiaScreen>
+    with AutomaticKeepAliveClientMixin {
+  Future<List<India>> fetchData() async {
+    final response = await http.get('https://api.covid19india.org/data.json');
+
+    if (response.statusCode == 200) {
+      List<India> data = [];
+      var finalData = json.decode(response.body);
+      var returnData = finalData['statewise'];
+
+      for (int i = 0; i < returnData.length; i++) {
+        data.add(India(
+          active: returnData[i]['active'],
+          confirmed: returnData[i]['confirmed'],
+          deltaconfirmed: returnData[i]['deltaconfirmed'],
+          deaths: returnData[i]['deaths'],
+          deltadeaths: returnData[i]['deltadeaths'],
+          recovered: returnData[i]['recovered'],
+          deltarecovered: returnData[i]['deltarecovered'],
+          lastupdatedtime: returnData[i]['lastupdatedtime'],
+          migratedother: returnData[i]['migratedother'],
+          state: returnData[i]['state'],
+          statecode: returnData[i]['statecode'],
+          statenotes: returnData[i]['statenotes'],
+        ));
+      }
+
+      return data;
+    } else {
+      print('error');
+      throw Exception('Failed to load album');
+    }
+  }
+
   Future<List<India>> futureData;
 
   @override
@@ -82,10 +86,19 @@ class _IndiaScreenState extends State<IndiaScreen> {
               itemBuilder: (context, i) {
                 final data = snapshot.data[i];
                 return i == 0
-                    ? Header('States', data)
+                    ? Header('States', data, null)
                     : Container(
-                        color: i % 2 == 1 ? Color(0xfff3f3f3) : Colors.white,
+                        decoration: i % 2 == 1
+                            ? BoxDecoration(
+                                color: Color(0xfff3f3f3),
+                                borderRadius: BorderRadius.circular(5),
+                              )
+                            : BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
                         padding: EdgeInsets.all(11),
+                        margin: EdgeInsets.all(1),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -120,4 +133,7 @@ class _IndiaScreenState extends State<IndiaScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

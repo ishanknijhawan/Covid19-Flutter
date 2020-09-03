@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:sher_in_the_city/widgets/header_total.dart';
+import '../models/world.dart';
+import '../widgets/header_total.dart';
+import '../widgets/header_total_world.dart';
 import '../models/india.dart';
 
 class Header extends StatelessWidget {
   final String location;
   final India india;
+  final World world;
 
-  Header(this.location, this.india);
+  Header(this.location, this.india, this.world);
 
   Widget buildExpanded(String status, Color color) {
     return Expanded(
@@ -26,7 +29,7 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(children: [
-        HeaderTotal(india),
+        location == 'States' ? HeaderTotal(india) : HeaderTotalWorld(world),
         Container(
           padding: EdgeInsets.fromLTRB(10, 10, 10, 15),
           child: Row(

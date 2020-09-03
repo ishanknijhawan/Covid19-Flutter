@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   static const active = 'assets/images/patient.svg';
   static const fever = 'assets/images/fever.svg';
   static const thermometer = 'assets/images/thermometer.svg';
+  static const death = 'assets/images/grave.svg';
 
   @override
   Widget build(BuildContext context) {
