@@ -57,6 +57,8 @@ flutter:
     - assets/images/fever.svg
     - assets/images/thermometer.svg
     - assets/images/grave.svg
+    - assets/images/sun.svg
+    - assets/images/moon.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

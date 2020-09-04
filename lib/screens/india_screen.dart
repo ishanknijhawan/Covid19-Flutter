@@ -2,10 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../main.dart';
+import '../theme/constants.dart';
 import '../widgets/header.dart';
 import '../models/india.dart';
 
 class IndiaScreen extends StatefulWidget {
+  final Function changeTheme;
+
+  IndiaScreen(this.changeTheme);
   @override
   _IndiaScreenState createState() => _IndiaScreenState();
 }
@@ -86,19 +91,23 @@ class _IndiaScreenState extends State<IndiaScreen>
               itemBuilder: (context, i) {
                 final data = snapshot.data[i];
                 return i == 0
-                    ? Header('States', data, null)
+                    ? Header('States', data, null, widget.changeTheme)
                     : Container(
                         decoration: i % 2 == 1
                             ? BoxDecoration(
-                                color: Color(0xfff3f3f3),
+                                color: MyApp.isDarkTheme
+                                    ? Color(0xff2c2c2c)
+                                    : Color(0xfff3f3f3),
                                 borderRadius: BorderRadius.circular(5),
                               )
                             : BoxDecoration(
-                                color: Colors.white,
+                                color: MyApp.isDarkTheme
+                                    ? kbAccentDarkColor22
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                         padding: EdgeInsets.all(11),
-                        margin: EdgeInsets.all(1),
+                        margin: EdgeInsets.all(2),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -107,18 +116,32 @@ class _IndiaScreenState extends State<IndiaScreen>
                               child: Text(
                                 data.state,
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: MyApp.isDarkTheme
+                                      ? Colors.white
+                                      : Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                            expandRow(data.confirmed, data.deltaconfirmed,
-                                Colors.red),
-                            expandRow(data.recovered, data.deltarecovered,
-                                Colors.green),
-                            expandRow(data.deaths, data.deltadeaths,
-                                Colors.deepPurple),
+                            MyApp.isDarkTheme
+                                ? expandRow(data.confirmed, data.deltaconfirmed,
+                                    kbLightRed)
+                                : expandRow(data.confirmed, data.deltaconfirmed,
+                                    Colors.red),
+                            MyApp.isDarkTheme
+                                ? expandRow(data.recovered, data.deltarecovered,
+                                    kbLightGreen)
+                                : expandRow(data.recovered, data.deltarecovered,
+                                    Colors.green),
+                            MyApp.isDarkTheme
+                                ? expandRow(
+                                    data.deaths,
+                                    data.deltadeaths,
+                                    kbLightPurple,
+                                  )
+                                : expandRow(data.deaths, data.deltadeaths,
+                                    Colors.deepPurple),
                           ],
                         ),
                       );

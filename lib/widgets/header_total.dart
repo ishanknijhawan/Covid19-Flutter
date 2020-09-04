@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:sher_in_the_city/theme/constants.dart';
 import '../main.dart';
 import '../models/india.dart';
+import '../main.dart';
 
-class HeaderTotal extends StatelessWidget {
+class HeaderTotal extends StatefulWidget {
   final India india;
-  HeaderTotal(this.india);
+  final Function changeTheme;
+  HeaderTotal(this.india, this.changeTheme);
+
+  @override
+  _HeaderTotalState createState() => _HeaderTotalState();
+}
+
+class _HeaderTotalState extends State<HeaderTotal> {
   final RegExp reg = new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+
   final Function mathFunc = (Match match) => '${match[1]},';
 
   Widget buildIcon(String textStatus, String status, String deltaStatus,
@@ -63,15 +73,36 @@ class HeaderTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime date =
-        new DateFormat("dd/MM/yyyy HH:mm:ss").parse(india.lastupdatedtime);
-    print('coming here with date ${india.lastupdatedtime}');
+    DateTime date = new DateFormat("dd/MM/yyyy HH:mm:ss")
+        .parse(widget.india.lastupdatedtime);
+    print('coming here with date ${widget.india.lastupdatedtime}');
 
     return Stack(
       children: [
         Container(
           height: 150,
           color: Theme.of(context).primaryColor,
+        ),
+        Positioned(
+          right: 25,
+          top: 15,
+          child: Container(
+            height: 40,
+            width: 40,
+            child: IconButton(
+                icon: MyApp.isDarkTheme
+                    ? SvgPicture.asset(
+                        MyApp.sun,
+                        color: Colors.black,
+                      )
+                    : SvgPicture.asset(
+                        MyApp.moon,
+                        color: Colors.white,
+                      ),
+                onPressed: () {
+                  widget.changeTheme();
+                }),
+          ),
         ),
         Positioned(
           left: 25,
@@ -82,7 +113,7 @@ class HeaderTotal extends StatelessWidget {
               Text(
                 'Covid19 Cases Overview',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: MyApp.isDarkTheme ? Colors.black : Colors.white,
                   fontSize: 20,
                   fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.bold,
@@ -94,7 +125,7 @@ class HeaderTotal extends StatelessWidget {
               Text(
                 'Last updated ${getTimeAgo(date)}',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: MyApp.isDarkTheme ? Colors.black : Colors.white,
                   fontSize: 14,
                   fontFamily: 'Ubuntu',
                 ),
@@ -108,6 +139,7 @@ class HeaderTotal extends StatelessWidget {
           margin: EdgeInsets.fromLTRB(20, 60, 20, 20),
           child: Center(
             child: Card(
+              color: MyApp.isDarkTheme ? Color(0xff363636) : Colors.white,
               elevation: 8,
               child: Center(
                 child: Container(
@@ -115,12 +147,24 @@ class HeaderTotal extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      buildIcon('CONFIRMED', india.confirmed,
-                          india.deltaconfirmed, Colors.red, MyApp.confirmed),
-                      buildIcon('RECOVERED', india.recovered, india.recovered,
-                          Colors.green, MyApp.recovered),
-                      buildIcon('DEATHS', india.deaths, india.deltadeaths,
-                          Colors.purple, MyApp.death),
+                      buildIcon(
+                          'CONFIRMED',
+                          widget.india.confirmed,
+                          widget.india.deltaconfirmed,
+                          MyApp.isDarkTheme ? kbLightRed : Colors.red,
+                          MyApp.confirmed),
+                      buildIcon(
+                          'RECOVERED',
+                          widget.india.recovered,
+                          widget.india.deltarecovered,
+                          MyApp.isDarkTheme ? kbLightGreen : Colors.green,
+                          MyApp.recovered),
+                      buildIcon(
+                          'DEATHS',
+                          widget.india.deaths,
+                          widget.india.deltadeaths,
+                          MyApp.isDarkTheme ? kbLightPurple : Colors.deepPurple,
+                          MyApp.death),
                     ],
                   ),
                 ),

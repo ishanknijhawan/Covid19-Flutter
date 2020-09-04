@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:sher_in_the_city/screens/india_screen.dart';
 import 'package:sher_in_the_city/screens/world_screen.dart';
 
-class TabsScreen extends StatelessWidget {
+class TabsScreen extends StatefulWidget {
+  final Function changeTheme;
+
+  TabsScreen(this.changeTheme);
+  @override
+  _TabsScreenState createState() => _TabsScreenState();
+}
+
+class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -32,7 +40,10 @@ class TabsScreen extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: [IndiaScreen(), WorldScreen()],
+          children: [
+            IndiaScreen(widget.changeTheme),
+            WorldScreen(widget.changeTheme)
+          ],
         ),
       ),
     );

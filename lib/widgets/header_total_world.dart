@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:sher_in_the_city/theme/constants.dart';
 import '../main.dart';
 import '../models/world.dart';
 
-class HeaderTotalWorld extends StatelessWidget {
+class HeaderTotalWorld extends StatefulWidget {
   final World world;
-  HeaderTotalWorld(this.world);
+  final Function changeTheme;
+  HeaderTotalWorld(this.world, this.changeTheme);
+
+  @override
+  _HeaderTotalWorldState createState() => _HeaderTotalWorldState();
+}
+
+class _HeaderTotalWorldState extends State<HeaderTotalWorld> {
   RegExp reg = new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+
   Function mathFunc = (Match match) => '${match[1]},';
 
   Widget buildIcon(String textStatus, int status, int deltaStatus, Color color,
@@ -56,7 +65,7 @@ class HeaderTotalWorld extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var date1 = world.Date;
+    var date1 = widget.world.Date;
     if (date1.contains("T")) date1 = date1.replaceAll("T", " ");
     if (date1.contains("Z")) date1 = date1.replaceAll("Z", "");
     if (date1.contains("-")) date1 = date1.replaceAll("-", "/");
@@ -71,6 +80,27 @@ class HeaderTotalWorld extends StatelessWidget {
           color: Theme.of(context).primaryColor,
         ),
         Positioned(
+          right: 25,
+          top: 15,
+          child: Container(
+            height: 40,
+            width: 40,
+            child: IconButton(
+                icon: MyApp.isDarkTheme
+                    ? SvgPicture.asset(
+                        MyApp.sun,
+                        color: Colors.black,
+                      )
+                    : SvgPicture.asset(
+                        MyApp.moon,
+                        color: Colors.white,
+                      ),
+                onPressed: () {
+                  widget.changeTheme();
+                }),
+          ),
+        ),
+        Positioned(
           left: 25,
           top: 15,
           child: Column(
@@ -79,7 +109,7 @@ class HeaderTotalWorld extends StatelessWidget {
               Text(
                 'Covid19 Global Status',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: MyApp.isDarkTheme ? Colors.black : Colors.white,
                   fontSize: 20,
                   fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.bold,
@@ -91,7 +121,7 @@ class HeaderTotalWorld extends StatelessWidget {
               Text(
                 'Last updated ${getTimeAgo(date)}',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: MyApp.isDarkTheme ? Colors.black : Colors.white,
                   fontSize: 14,
                   fontFamily: 'Ubuntu',
                 ),
@@ -105,6 +135,7 @@ class HeaderTotalWorld extends StatelessWidget {
           margin: EdgeInsets.fromLTRB(20, 60, 20, 20),
           child: Center(
             child: Card(
+              color: MyApp.isDarkTheme ? Color(0xff363636) : Colors.white,
               elevation: 8,
               child: Center(
                 child: Container(
@@ -112,12 +143,24 @@ class HeaderTotalWorld extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      buildIcon('CONFIRMED', world.TotalConfirmed,
-                          world.NewConfirmed, Colors.red, MyApp.confirmed),
-                      buildIcon('RECOVERED', world.TotalRecovered,
-                          world.NewRecovered, Colors.green, MyApp.recovered),
-                      buildIcon('DEATHS', world.TotalDeaths, world.NewDeaths,
-                          Colors.purple, MyApp.death),
+                      buildIcon(
+                          'CONFIRMED',
+                          widget.world.TotalConfirmed,
+                          widget.world.NewConfirmed,
+                          MyApp.isDarkTheme ? kbLightRed : Colors.red,
+                          MyApp.confirmed),
+                      buildIcon(
+                          'RECOVERED',
+                          widget.world.TotalRecovered,
+                          widget.world.NewRecovered,
+                          MyApp.isDarkTheme ? kbLightGreen : Colors.green,
+                          MyApp.recovered),
+                      buildIcon(
+                          'DEATHS',
+                          widget.world.TotalDeaths,
+                          widget.world.NewDeaths,
+                          MyApp.isDarkTheme ? kbLightPurple : Colors.deepPurple,
+                          MyApp.death),
                     ],
                   ),
                 ),

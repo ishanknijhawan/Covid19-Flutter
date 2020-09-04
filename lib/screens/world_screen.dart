@@ -2,10 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sher_in_the_city/main.dart';
+import 'package:sher_in_the_city/theme/constants.dart';
 import '../widgets/header.dart';
 import '../models/world.dart';
 
 class WorldScreen extends StatefulWidget {
+  final Function changeTheme;
+  WorldScreen(this.changeTheme);
   @override
   _WorldScreenState createState() => _WorldScreenState();
 }
@@ -70,7 +74,7 @@ class _WorldScreenState extends State<WorldScreen>
               NewDeaths: deltaDeaths,
               TotalDeaths: totalDeaths,
               NewRecovered: deltaRecovered,
-              TotalRecovered: totalDeaths,
+              TotalRecovered: totalRecovered,
               Date: returnData[0]['Date']));
         } else {
           data.add(World(
@@ -119,19 +123,23 @@ class _WorldScreenState extends State<WorldScreen>
               itemBuilder: (context, i) {
                 final data = snapshot.data[i];
                 return i == 0
-                    ? Header('Countries', null, data)
+                    ? Header('Countries', null, data, widget.changeTheme)
                     : Container(
                         decoration: i % 2 == 1
                             ? BoxDecoration(
-                                color: Color(0xfff3f3f3),
+                                color: MyApp.isDarkTheme
+                                    ? Color(0xff2c2c2c)
+                                    : Color(0xfff3f3f3),
                                 borderRadius: BorderRadius.circular(5),
                               )
                             : BoxDecoration(
-                                color: Colors.white,
+                                color: MyApp.isDarkTheme
+                                    ? kbAccentDarkColor22
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                         padding: EdgeInsets.all(11),
-                        margin: EdgeInsets.all(1),
+                        margin: EdgeInsets.all(2),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -140,18 +148,28 @@ class _WorldScreenState extends State<WorldScreen>
                               child: Text(
                                 data.Country,
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: MyApp.isDarkTheme
+                                      ? Colors.white
+                                      : Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                             expandRow(data.TotalConfirmed, data.NewConfirmed,
-                                Colors.red),
-                            expandRow(data.TotalConfirmed, data.NewRecovered,
-                                Colors.green),
-                            expandRow(data.TotalDeaths, data.NewDeaths,
-                                Colors.deepPurple),
+                                MyApp.isDarkTheme ? kbLightRed : Colors.red),
+                            expandRow(
+                                data.TotalConfirmed,
+                                data.NewRecovered,
+                                MyApp.isDarkTheme
+                                    ? kbLightGreen
+                                    : Colors.green),
+                            expandRow(
+                                data.TotalDeaths,
+                                data.NewDeaths,
+                                MyApp.isDarkTheme
+                                    ? kbLightPurple
+                                    : Colors.deepPurple),
                           ],
                         ),
                       );
