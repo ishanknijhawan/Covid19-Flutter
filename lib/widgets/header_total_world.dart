@@ -181,10 +181,10 @@ String getTimeAgo(DateTime past) {
 
   if (hours == 0 && minutes == 0) {
     return '$seconds seconds ago';
+  } else if (hours > 0 && hours < 24) {
+    return '$hours hours $minutes minutes ago';
   } else if (minutes > 0) {
     return '$minutes minutes ago';
-  } else if (hours > 0 && hours < 24) {
-    return '$hours hours ago';
   } else {
     return DateFormat('MMM dd, YYYY').format(past).toString();
   }

@@ -182,12 +182,16 @@ String getTimeAgo(DateTime past) {
   var minutes = double.parse(difference.toString().split(':')[1]).round();
   var seconds = double.parse(difference.toString().split(':')[2]).round();
 
+  print("BE time is $past");
+  print("now time is $date");
+  print("difference is $difference");
+
   if (hours == 0 && minutes == 0) {
     return '$seconds seconds ago';
+  } else if (hours > 0 && hours < 24) {
+    return '$hours hours $minutes minutes ago';
   } else if (minutes > 0) {
     return '$minutes minutes ago';
-  } else if (hours > 0 && hours < 24) {
-    return '$hours hours ago';
   } else {
     return DateFormat('MMM dd, YYYY').format(past).toString();
   }

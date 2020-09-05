@@ -32,14 +32,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    print('init state');
     getPrefs();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('coming in build with theme ${MyApp.isDarkTheme}');
     return MaterialApp(
       theme: MyApp.isDarkTheme
           //dark theme
@@ -69,13 +67,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getPrefs() async {
-    print('getPrefs');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('isDark') != null) {
       setState(() {
         MyApp.isDarkTheme = prefs.getBool('isDark');
       });
-      print('coming here, there changed to ${MyApp.isDarkTheme}');
     }
   }
 }
