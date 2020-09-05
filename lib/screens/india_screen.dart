@@ -30,8 +30,10 @@ Widget expandRow(String status, String deltaStatus, Color color) {
         ),
         if (deltaStatus != '0')
           Text(
-            '↑$deltaStatus',
-            style: TextStyle(color: Colors.grey, fontSize: 15),
+            '↑${deltaStatus.replaceAllMapped(reg, mathFunc)}',
+            style: TextStyle(
+                color: MyApp.isDarkTheme ? Colors.grey : Color(0xff919191),
+                fontSize: 15),
           ),
       ],
     ),
@@ -97,7 +99,7 @@ class _IndiaScreenState extends State<IndiaScreen>
                             ? BoxDecoration(
                                 color: MyApp.isDarkTheme
                                     ? Color(0xff2c2c2c)
-                                    : Color(0xfff3f3f3),
+                                    : Colors.grey.withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(5),
                               )
                             : BoxDecoration(
@@ -151,7 +153,9 @@ class _IndiaScreenState extends State<IndiaScreen>
           } else if (snapshot.hasError) {
             return Text('Error!');
           }
-          return CircularProgressIndicator();
+          return CircularProgressIndicator(
+            backgroundColor: Theme.of(context).primaryColor,
+          );
         },
       ),
     );

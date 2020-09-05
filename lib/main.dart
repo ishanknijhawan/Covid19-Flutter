@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './screens/tabs_screen.dart';
 
 void main() {
@@ -25,11 +26,20 @@ class _MyAppState extends State<MyApp> {
   void changeTheme() {
     setState(() {
       MyApp.isDarkTheme = !MyApp.isDarkTheme;
+      setPrefs();
     });
   }
 
   @override
+  void initState() {
+    print('init state');
+    getPrefs();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('coming in build with theme ${MyApp.isDarkTheme}');
     return MaterialApp(
       theme: MyApp.isDarkTheme
           //dark theme
@@ -37,17 +47,35 @@ class _MyAppState extends State<MyApp> {
               primaryColor: Color(0xff6eb5ef),
               accentColor: Colors.black,
               scaffoldBackgroundColor: Color(0xff222222),
-              //fontFamily: 'Ubuntu',
+              backgroundColor: Color(0xff222222),
+              fontFamily: 'Ubuntu',
             )
           //no dark theme
           : ThemeData(
               primaryColor: Color(0xff0F528A),
               accentColor: Colors.white,
               scaffoldBackgroundColor: Colors.white,
+              backgroundColor: Colors.white,
               fontFamily: 'Ubuntu',
             ),
       debugShowCheckedModeBanner: false,
       home: TabsScreen(changeTheme),
     );
+  }
+
+  void setPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isDark', MyApp.isDarkTheme);
+  }
+
+  void getPrefs() async {
+    print('getPrefs');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('isDark') != null) {
+      setState(() {
+        MyApp.isDarkTheme = prefs.getBool('isDark');
+      });
+      print('coming here, there changed to ${MyApp.isDarkTheme}');
+    }
   }
 }

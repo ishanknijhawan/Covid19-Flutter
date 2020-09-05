@@ -55,7 +55,7 @@ class _HeaderTotalWorldState extends State<HeaderTotalWorld> {
           '↑${deltaStatus.toString().replaceAllMapped(reg, mathFunc)}',
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey,
+            color: MyApp.isDarkTheme ? Colors.grey : Color(0xff919191),
             fontWeight: FontWeight.normal,
           ),
         ),
@@ -71,7 +71,6 @@ class _HeaderTotalWorldState extends State<HeaderTotalWorld> {
     if (date1.contains("-")) date1 = date1.replaceAll("-", "/");
 
     DateTime date = new DateFormat("yyyy/MM/dd HH:mm:ss").parse(date1);
-    print('coming here with date $date');
 
     return Stack(
       children: [
@@ -179,10 +178,6 @@ String getTimeAgo(DateTime past) {
   var hours = double.parse(difference.toString().split(':')[0]).round();
   var minutes = double.parse(difference.toString().split(':')[1]).round();
   var seconds = double.parse(difference.toString().split(':')[2]).round();
-
-  print('present date is $date');
-  print('past date is $past');
-  print('difference is $difference');
 
   if (hours == 0 && minutes == 0) {
     return '$seconds seconds ago';

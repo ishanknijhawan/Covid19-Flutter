@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:sher_in_the_city/theme/constants.dart';
 import '../main.dart';
 import '../models/india.dart';
-import '../main.dart';
 
 class HeaderTotal extends StatefulWidget {
   final India india;
@@ -57,7 +56,7 @@ class _HeaderTotalState extends State<HeaderTotal> {
                 '↑${deltaStatus.replaceAllMapped(reg, mathFunc)}',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.grey,
+                  color: MyApp.isDarkTheme ? Colors.grey : Color(0xff919191),
                   fontWeight: FontWeight.normal,
                 ),
               )
@@ -75,7 +74,6 @@ class _HeaderTotalState extends State<HeaderTotal> {
   Widget build(BuildContext context) {
     DateTime date = new DateFormat("dd/MM/yyyy HH:mm:ss")
         .parse(widget.india.lastupdatedtime);
-    print('coming here with date ${widget.india.lastupdatedtime}');
 
     return Stack(
       children: [
@@ -183,10 +181,6 @@ String getTimeAgo(DateTime past) {
   var hours = double.parse(difference.toString().split(':')[0]).round();
   var minutes = double.parse(difference.toString().split(':')[1]).round();
   var seconds = double.parse(difference.toString().split(':')[2]).round();
-
-  print('present date is $date');
-  print('past date is $past');
-  print('difference is $difference');
 
   if (hours == 0 && minutes == 0) {
     return '$seconds seconds ago';
