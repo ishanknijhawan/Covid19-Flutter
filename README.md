@@ -1,16 +1,6 @@
 # Covid19 Flutter
 
-A new Flutter project.
+| India Count                                                  | World Count                                                  | Dark Mode                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="https://user-images.githubusercontent.com/45118110/92299827-8df2d280-ef73-11ea-8335-e83233bf78c8.png" style="zoom:25%;" /> | <img src="https://user-images.githubusercontent.com/45118110/92299828-8f23ff80-ef73-11ea-8e41-f5927564da0d.png" style="zoom:25%;" /> | <img src="https://user-images.githubusercontent.com/45118110/92299829-90552c80-ef73-11ea-836c-63e98c8cc732.png" style="zoom:25%;" /> |
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
