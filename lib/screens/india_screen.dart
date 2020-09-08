@@ -66,7 +66,6 @@ class _IndiaScreenState extends State<IndiaScreen>
           statenotes: returnData[i]['statenotes'],
         ));
       }
-
       return data;
     } else {
       print('error');
@@ -82,81 +81,93 @@ class _IndiaScreenState extends State<IndiaScreen>
     futureData = fetchData();
   }
 
+  Future<List<India>> refresh() async {
+    setState(() {
+      futureData = fetchData();
+    });
+    return futureData;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: FutureBuilder<List<India>>(
-        future: futureData,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemBuilder: (context, i) {
-                final data = snapshot.data[i];
-                return i == 0
-                    ? Header('States', data, null, widget.changeTheme)
-                    : Container(
-                        decoration: i % 2 == 1
-                            ? BoxDecoration(
-                                color: MyApp.isDarkTheme
-                                    ? Color(0xff2c2c2c)
-                                    : Colors.grey.withOpacity(0.15),
-                                borderRadius: BorderRadius.circular(5),
-                              )
-                            : BoxDecoration(
-                                color: MyApp.isDarkTheme
-                                    ? kbAccentDarkColor22
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                        padding: EdgeInsets.all(11),
-                        margin: EdgeInsets.all(2),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                data.state,
-                                style: TextStyle(
+    return RefreshIndicator(
+      backgroundColor: Theme.of(context).backgroundColor,
+      color: Theme.of(context).buttonColor,
+      onRefresh: refresh,
+      child: Center(
+        child: FutureBuilder<List<India>>(
+          future: futureData,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemBuilder: (context, i) {
+                  final data = snapshot.data[i];
+                  return i == 0
+                      ? Header('States', data, null, widget.changeTheme)
+                      : Container(
+                          decoration: i % 2 == 1
+                              ? BoxDecoration(
                                   color: MyApp.isDarkTheme
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
+                                      ? Color(0xff2c2c2c)
+                                      : Colors.grey.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(5),
+                                )
+                              : BoxDecoration(
+                                  color: MyApp.isDarkTheme
+                                      ? kbAccentDarkColor22
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                          padding: EdgeInsets.all(11),
+                          margin: EdgeInsets.all(2),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  data.state,
+                                  style: TextStyle(
+                                    color: MyApp.isDarkTheme
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                            MyApp.isDarkTheme
-                                ? expandRow(data.confirmed, data.deltaconfirmed,
-                                    kbLightRed)
-                                : expandRow(data.confirmed, data.deltaconfirmed,
-                                    Colors.red),
-                            MyApp.isDarkTheme
-                                ? expandRow(data.recovered, data.deltarecovered,
-                                    kbLightGreen)
-                                : expandRow(data.recovered, data.deltarecovered,
-                                    Colors.green),
-                            MyApp.isDarkTheme
-                                ? expandRow(
-                                    data.deaths,
-                                    data.deltadeaths,
-                                    kbLightPurple,
-                                  )
-                                : expandRow(data.deaths, data.deltadeaths,
-                                    Colors.deepPurple),
-                          ],
-                        ),
-                      );
-              },
-              itemCount: snapshot.data.length,
+                              MyApp.isDarkTheme
+                                  ? expandRow(data.confirmed,
+                                      data.deltaconfirmed, kbLightRed)
+                                  : expandRow(data.confirmed,
+                                      data.deltaconfirmed, Colors.red),
+                              MyApp.isDarkTheme
+                                  ? expandRow(data.recovered,
+                                      data.deltarecovered, kbLightGreen)
+                                  : expandRow(data.recovered,
+                                      data.deltarecovered, Colors.green),
+                              MyApp.isDarkTheme
+                                  ? expandRow(
+                                      data.deaths,
+                                      data.deltadeaths,
+                                      kbLightPurple,
+                                    )
+                                  : expandRow(data.deaths, data.deltadeaths,
+                                      Colors.deepPurple),
+                            ],
+                          ),
+                        );
+                },
+                itemCount: snapshot.data.length,
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error!');
+            }
+            return CircularProgressIndicator(
+              backgroundColor: Theme.of(context).primaryColor,
             );
-          } else if (snapshot.hasError) {
-            return Text('Error!');
-          }
-          return CircularProgressIndicator(
-            backgroundColor: Theme.of(context).primaryColor,
-          );
-        },
+          },
+        ),
       ),
     );
   }

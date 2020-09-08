@@ -114,77 +114,89 @@ class _WorldScreenState extends State<WorldScreen>
     futureData = fetchData();
   }
 
+  Future<List<World>> refresh() async {
+    setState(() {
+      futureData = fetchData();
+    });
+    return futureData;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: FutureBuilder<List<World>>(
-        future: futureData,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemBuilder: (context, i) {
-                final data = snapshot.data[i];
-                return i == 0
-                    ? Header('Countries', null, data, widget.changeTheme)
-                    : Container(
-                        decoration: i % 2 == 1
-                            ? BoxDecoration(
-                                color: MyApp.isDarkTheme
-                                    ? Color(0xff2c2c2c)
-                                    : Colors.grey.withOpacity(0.15),
-                                borderRadius: BorderRadius.circular(5),
-                              )
-                            : BoxDecoration(
-                                color: MyApp.isDarkTheme
-                                    ? kbAccentDarkColor22
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                        padding: EdgeInsets.all(11),
-                        margin: EdgeInsets.all(2),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                data.Country,
-                                style: TextStyle(
+    return RefreshIndicator(
+      backgroundColor: Theme.of(context).backgroundColor,
+      color: Theme.of(context).buttonColor,
+      onRefresh: refresh,
+      child: Center(
+        child: FutureBuilder<List<World>>(
+          future: futureData,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemBuilder: (context, i) {
+                  final data = snapshot.data[i];
+                  return i == 0
+                      ? Header('Countries', null, data, widget.changeTheme)
+                      : Container(
+                          decoration: i % 2 == 1
+                              ? BoxDecoration(
                                   color: MyApp.isDarkTheme
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
+                                      ? Color(0xff2c2c2c)
+                                      : Colors.grey.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(5),
+                                )
+                              : BoxDecoration(
+                                  color: MyApp.isDarkTheme
+                                      ? kbAccentDarkColor22
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                          padding: EdgeInsets.all(11),
+                          margin: EdgeInsets.all(2),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  data.Country,
+                                  style: TextStyle(
+                                    color: MyApp.isDarkTheme
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                            expandRow(data.TotalConfirmed, data.NewConfirmed,
-                                MyApp.isDarkTheme ? kbLightRed : Colors.red),
-                            expandRow(
-                                data.TotalConfirmed,
-                                data.NewRecovered,
-                                MyApp.isDarkTheme
-                                    ? kbLightGreen
-                                    : Colors.green),
-                            expandRow(
-                                data.TotalDeaths,
-                                data.NewDeaths,
-                                MyApp.isDarkTheme
-                                    ? kbLightPurple
-                                    : Colors.deepPurple),
-                          ],
-                        ),
-                      );
-              },
-              itemCount: snapshot.data.length,
+                              expandRow(data.TotalConfirmed, data.NewConfirmed,
+                                  MyApp.isDarkTheme ? kbLightRed : Colors.red),
+                              expandRow(
+                                  data.TotalConfirmed,
+                                  data.NewRecovered,
+                                  MyApp.isDarkTheme
+                                      ? kbLightGreen
+                                      : Colors.green),
+                              expandRow(
+                                  data.TotalDeaths,
+                                  data.NewDeaths,
+                                  MyApp.isDarkTheme
+                                      ? kbLightPurple
+                                      : Colors.deepPurple),
+                            ],
+                          ),
+                        );
+                },
+                itemCount: snapshot.data.length,
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error!');
+            }
+            return CircularProgressIndicator(
+              backgroundColor: Theme.of(context).primaryColor,
             );
-          } else if (snapshot.hasError) {
-            return Text('Error!');
-          }
-          return CircularProgressIndicator(
-            backgroundColor: Theme.of(context).primaryColor,
-          );
-        },
+          },
+        ),
       ),
     );
   }

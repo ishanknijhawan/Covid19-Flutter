@@ -15,6 +15,7 @@ class MyApp extends StatefulWidget {
   static const thermometer = 'assets/images/thermometer.svg';
   static const death = 'assets/images/grave.svg';
   static const sun = 'assets/images/sun.svg';
+
   static const moon = 'assets/images/moon.svg';
   static var isDarkTheme = false;
 
@@ -44,6 +45,7 @@ class _MyAppState extends State<MyApp> {
           ? ThemeData(
               primaryColor: Color(0xff6eb5ef),
               accentColor: Colors.black,
+              buttonColor: Colors.white,
               scaffoldBackgroundColor: Color(0xff222222),
               backgroundColor: Color(0xff222222),
               fontFamily: 'Ubuntu',
@@ -52,6 +54,7 @@ class _MyAppState extends State<MyApp> {
           : ThemeData(
               primaryColor: Color(0xff0F528A),
               accentColor: Colors.white,
+              buttonColor: Colors.black,
               scaffoldBackgroundColor: Colors.white,
               backgroundColor: Colors.white,
               fontFamily: 'Ubuntu',
