@@ -172,7 +172,7 @@ class _WorldScreenState extends State<WorldScreen>
                               expandRow(data.TotalConfirmed, data.NewConfirmed,
                                   MyApp.isDarkTheme ? kbLightRed : Colors.red),
                               expandRow(
-                                  data.TotalConfirmed,
+                                  data.TotalRecovered,
                                   data.NewRecovered,
                                   MyApp.isDarkTheme
                                       ? kbLightGreen
